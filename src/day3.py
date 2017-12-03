@@ -39,6 +39,7 @@ for i, step in enumerate(steps_from_center(), start=2):
         y += step.dy
         square[y][x] = i
 
-indices = [(ix, iy) for ix, row in enumerate(square) for iy, i in enumerate(row) if i == number]
-t1, t2 = indices[0]
-print sum([abs(t1 - x0), abs(t2 - y0)])
+    if i == number:
+        break
+
+print sum([abs(x - x0), abs(y - y0)])
