@@ -1,45 +1,53 @@
-from math import ceil, sqrt
 from collections import namedtuple
 from itertools import count
+from math import ceil, sqrt
 
-number = 265149
+INPUT_NUMBER = 265149
 
-Step = namedtuple("Step", ["dx", "dy"])
-RIGHT = Step(1, 0)
-DOWN = Step(0, 1)
-LEFT = Step(-1, 0)
-UP = Step(0, -1)
+Step = namedtuple("Step", ["dx", "dy", "direction"])
+RIGHT = Step(1, 0, "Right")
+DOWN = Step(0, 1, "Down")
+LEFT = Step(-1, 0, "Left")
+UP = Step(0, -1, "Up")
+
 
 def steps_from_center():
-    for n in count(start=1):
-        if n % 2:
+    for center_step in count(start=1):
+        if center_step % 2:
             yield RIGHT
-            for _ in range(n):
+            for _ in range(center_step):
                 yield UP
-            for _ in range(n):
+            for _ in range(center_step):
                 yield LEFT
         else:
             yield LEFT
-            for _ in range(n):
+            for _ in range(center_step):
                 yield DOWN
-            for _ in range(n):
+            for _ in range(center_step):
                 yield RIGHT
 
-square_size = int(ceil(sqrt(number)))
-square = [[None] * square_size for _ in range(square_size)]
 
-x0 = y0 = x = y = square_size // 2
-square[y][x] = 1
+def part1():
+    square_size = int(ceil(sqrt(INPUT_NUMBER)))
+    square_matrix = [[None] * square_size for _ in range(square_size)]
 
-for i, step in enumerate(steps_from_center(), start=2):
-    if i > number:
-        break
-    else:
-        x += step.dx
-        y += step.dy
-        square[y][x] = i
+    # find center
+    starting_x = starting_y = x = y = square_size // 2
+    # fill initial 1
+    square_matrix[y][x] = 1
 
-    if i == number:
-        break
+    for index, step in enumerate(steps_from_center(), start=2):
+        if index > INPUT_NUMBER:
+            break
+        else:
+            x += step.dx
+            y += step.dy
+            square_matrix[y][x] = index
 
-print sum([abs(x - x0), abs(y - y0)])
+        if index == INPUT_NUMBER:
+            break
+
+    print sum([abs(x - starting_x), abs(y - starting_y)])
+
+
+part1()
